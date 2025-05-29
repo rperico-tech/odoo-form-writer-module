@@ -2,7 +2,7 @@
 
 > **Developer:** Ricardo Perico Jr  
 > **Role:** FullStack Developer Intern  
-> **Note:** This documentation is for internal reference only. Code uploads are restricted by company policy.
+> **Note:** This repository only contains documentation. Code contributions and uploads are restricted in accordance with company policy.
 
 ---
 
