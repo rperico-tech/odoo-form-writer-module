@@ -14,15 +14,15 @@ The **Pre-Printed Forms Module** for Odoo enables the creation and management of
 
 ## Key Features
 
-- ✅ Upload and register PDF templates as static base forms.  
-- ✅ Add overlay text items with pixel-precise placement.  
-- ✅ Dynamically render content using Odoo model fields.  
-- ✅ Support for multiple page sizes: A4, A3, Letter, Legal, Half-sheet.  
-- ✅ Custom and built-in font support (TrueType and ReportLab).  
-- ✅ Font styling: **bold**, *italic*, underline, and combinations.  
-- ✅ Manual underline drawing for non-native font support.  
-- ✅ Generate downloadable, print-ready PDFs with overlays.  
-- ✅ Server actions integration for process automation.  
+-  Upload and register PDF templates as static base forms.  
+-  Add overlay text items with pixel-precise placement.  
+-  Dynamically render content using Odoo model fields.  
+-  Support for multiple page sizes: A4, A3, Letter, Legal, Half-sheet.  
+-  Custom and built-in font support (TrueType and ReportLab).  
+-  Font styling: **bold**, *italic*, underline, and combinations.  
+-  Manual underline drawing for non-native font support.  
+-  Generate downloadable, print-ready PDFs with overlays.  
+-  Server actions integration for process automation.  
 
 ---
 
@@ -70,7 +70,7 @@ The **Pre-Printed Forms Module** for Odoo enables the creation and management of
 
 ---
 
-## 🛠️ Implementation Details (by Developer)
+## Implementation Details (by Developer)
 
 This module was developed in **Odoo v17** using:
 
