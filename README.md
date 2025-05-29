@@ -1,7 +1,7 @@
 # Pre-Printed Forms Module for Odoo
 
-> **Developer:** *[Your Name]*  
-> **Role:** Module Developer  
+> **Developer:** Ricardo Perico Jr  
+> **Role:** FullStack Developer Intern 
 > **Note:** This documentation is for internal reference only. Code uploads are restricted by company policy.
 
 ---
@@ -85,3 +85,72 @@ import PyPDF2
 from io import BytesIO
 import base64
 from odoo.modules import get_module_path
+```
+
+### Custom Font Registration
+
+```python
+font_path = get_module_path('your_module') + '/static/fonts/'
+pdfmetrics.registerFont(TTFont('Calibri-BoldItalic', font_path + 'CALIBRI-BoldItalic.ttf'))
+```
+
+Registers a TrueType font for use in PDF generation. Font names must match their PostScript identifiers.
+
+---
+
+### Rendering Overlay Text on Canvas
+
+```python
+buffer = BytesIO()
+pdf = canvas.Canvas(buffer, pagesize=A4)
+
+pdf.setFont("Calibri-BoldItalic", 12)
+pdf.drawString(100, 700, "Sample Text")
+```
+
+Creates a canvas and draws overlay text at a fixed position using the selected font and size.
+
+---
+
+### Underline Drawing (Manual)
+
+```python
+text = "Underlined Text"
+x, y = 100, 680
+pdf.drawString(x, y, text)
+text_width = pdf.stringWidth(text, "Calibri-Bold", 12)
+pdf.line(x, y - 2, x + text_width, y - 2)
+```
+
+Underline is not natively supported by fonts, so it is drawn manually using a line beneath the text.
+
+---
+
+### Merging with Base PDF (Using PyPDF2)
+
+```python
+# Save overlay
+pdf.save()
+buffer.seek(0)
+
+# Load base and overlay
+base_reader = PyPDF2.PdfReader(BytesIO(base64.b64decode(record.template_pdf)))
+overlay_reader = PyPDF2.PdfReader(buffer)
+
+# Merge pages
+output = PyPDF2.PdfWriter()
+for i in range(len(base_reader.pages)):
+    base_page = base_reader.pages[i]
+    overlay_page = overlay_reader.pages[0]
+    base_page.merge_page(overlay_page)
+    output.add_page(base_page)
+
+# Output to binary field
+output_buffer = BytesIO()
+output.write(output_buffer)
+record.generated_pdf = base64.b64encode(output_buffer.getvalue())
+```
+
+Merges the static base PDF with the dynamic overlay and stores the result as a binary PDF in Odoo.
+
+---
