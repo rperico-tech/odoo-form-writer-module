@@ -1,7 +1,7 @@
 # Pre-Printed Forms Module for Odoo
 
 > **Developer:** Ricardo Perico Jr  
-> **Role:** FullStack Developer Intern 
+> **Role:** FullStack Developer Intern
 > **Note:** This documentation is for internal reference only. Code uploads are restricted by company policy.
 
 ---
