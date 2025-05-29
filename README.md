@@ -1,82 +1,87 @@
 # Pre-Printed Forms Module for Odoo
 
-This Odoo module allows users to create and manage pre-printed forms with customizable overlay text items, supporting multiple page sizes and advanced font styling including bold, italic, underline, and combinations using both built-in and custom TrueType fonts.
+> **Developer:** *[Your Name]*  
+> **Role:** Module Developer  
+> **Note:** This documentation is for internal reference only. Code uploads are restricted by company policy.
 
 ---
 
-## Features
+## Overview
 
-- Upload PDF templates as base forms.
-- Add overlay text items positioned precisely on the form.
-- Dynamic text rendering based on model fields.
-- Supports multiple page sizes: Letter, Legal, A3, A4, Half-sheet formats.
-- Custom font support with registration of TrueType fonts (e.g., Arial, Calibri, AgencyFB).
-- Supports font styles: normal, bold, italic, bold-italic, underline.
-- Generates downloadable PDF output with overlays merged.
-- Create contextual server actions for automation.
+The **Pre-Printed Forms Module** for Odoo enables the creation and management of pre-designed PDF forms with dynamic text overlays. It supports precise positioning, multiple font styles, and full control over page formats—ideal for automating government, legal, or custom company forms.
 
 ---
 
-## Installation
+## Key Features
 
-1. Place the module folder under your Odoo addons directory.
-2. Add your custom font files (`.ttf`) in the module's `static/fonts` folder:
-   - `AGENCYFB.ttf`, `AGENCYFB-Bold.ttf`, `AGENCYFB-Italic.ttf`, `AGENCYFB-BoldItalic.ttf`
-   - `CALIBRI.ttf`, `CALIBRI-Bold.ttf`, `CALIBRI-Italic.ttf`, `CALIBRI-BoldItalic.ttf`
-   - `ARIAL.ttf`, `ARIAL-Bold.ttf`, `ARIAL-Italic.ttf`, `ARIAL-BoldItalic.ttf`
-3. Update your Odoo app list and install the module.
-4. Ensure your PDF files are uploaded correctly through the provided interface.
-
----
-
-## Usage
-
-1. Create a new Pre-Printed Form record.
-2. Upload a base PDF template.
-3. Define overlay text items with their coordinates, font style, size, and formatting options.
-4. Use dynamic fields to pull text from related models if needed.
-5. Generate the output PDF with merged overlays.
-6. (Optional) Create contextual server actions to automate processing on related records.
+- ✅ Upload and register PDF templates as static base forms.  
+- ✅ Add overlay text items with pixel-precise placement.  
+- ✅ Dynamically render content using Odoo model fields.  
+- ✅ Support for multiple page sizes: A4, A3, Letter, Legal, Half-sheet.  
+- ✅ Custom and built-in font support (TrueType and ReportLab).  
+- ✅ Font styling: **bold**, *italic*, underline, and combinations.  
+- ✅ Manual underline drawing for non-native font support.  
+- ✅ Generate downloadable, print-ready PDFs with overlays.  
+- ✅ Server actions integration for process automation.  
 
 ---
 
-## Supported Fonts
+## Installation (Internal Use)
 
-- Built-in ReportLab fonts with styles for:
-  - Times (Roman, Bold, Italic, BoldItalic)
-  - Helvetica (Normal, Bold, Oblique, BoldOblique)
-  - Courier (Normal, Bold, Oblique, BoldOblique)
-- Custom fonts loaded via TTF files:
-  - AgencyFB
-  - Calibri
-  - Arial
+1. **Place the module folder** inside your local Odoo `addons` directory.  
+2. **Add custom font files (`.ttf`)** under:  
+   `your_module/static/fonts/`  
+   Supported fonts:
+   - **Arial**: `ARIAL.ttf`, `ARIAL-Bold.ttf`, `ARIAL-Italic.ttf`, `ARIAL-BoldItalic.ttf`
+   - **Calibri**: `CALIBRI.ttf`, `CALIBRI-Bold.ttf`, `CALIBRI-Italic.ttf`, `CALIBRI-BoldItalic.ttf`
+   - **AgencyFB**: `AGENCYFB.ttf`, `AGENCYFB-Bold.ttf`, `AGENCYFB-Italic.ttf`, `AGENCYFB-BoldItalic.ttf`
 
----
-
-## Developer Notes
-
-- The module registers custom fonts dynamically on PDF generation.
-- Use exact PostScript font names in your font style configuration.
-- Font format is now implemented with checkboxes allowing combinations of bold, italic, and underline.
-- Underline is drawn manually using a line under the text.
-- Custom code execution is supported to add arbitrary overlay texts via Python expressions (use with caution).
-- Make sure all custom fonts are present in the `static/fonts` directory with correct filenames.
+3. **Update the Apps list** and install the module through the Odoo interface.  
+4. Upload PDF templates via the module UI and begin form setup.  
 
 ---
 
-## Troubleshooting
+## How to Use
 
-- **Fonts not applied correctly?**  
-  Ensure TTF files are properly named and placed in the `static/fonts` folder.  
-  For built-in fonts (Times, Helvetica, Courier), no TTF registration is required.
-
-- **PDF output issues?**  
-  Verify that the base PDF and overlays do not have page size conflicts.  
-  Confirm that your coordinates are correct for the selected page size.
-
-- **Server errors on font registration?**  
-  Check Odoo logs for permission issues or path problems with font files.
+1. **Create a Form Record:** Navigate to the module interface and create a new pre-printed form.  
+2. **Upload a PDF Template:** This acts as the static background.  
+3. **Define Text Overlays:**
+   - Set X/Y coordinates (in points).
+   - Choose font, style (bold, italic, underline), and size.
+   - Bind to static text or Odoo model fields dynamically.
+4. **Generate Output:** Render and download the final PDF with overlays.  
+5. **(Optional) Automate:** Add server actions to trigger generation from related models (e.g., Invoices, Orders).
 
 ---
 
+## Fonts Supported
 
+### Built-In Fonts (No TTF Needed)
+
+- Times (Roman, Bold, Italic, BoldItalic)  
+- Helvetica (Normal, Bold, Oblique, BoldOblique)  
+- Courier (Normal, Bold, Oblique, BoldOblique)  
+
+### Custom Fonts (TTF Required)
+
+- **Arial**  
+- **Calibri**  
+- **AgencyFB**
+
+---
+
+## 🛠️ Implementation Details (by Developer)
+
+This module was developed in **Odoo v17** using:
+
+```python
+from odoo import models, fields, api
+from odoo.exceptions import UserError
+from reportlab.lib.pagesizes import letter, legal, A3, A4
+from reportlab.pdfgen import canvas
+from reportlab.pdfbase.ttfonts import TTFont
+from reportlab.pdfbase import pdfmetrics
+import PyPDF2
+from io import BytesIO
+import base64
+from odoo.modules import get_module_path
